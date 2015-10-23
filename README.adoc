@@ -14,10 +14,11 @@ if you just need to learn how to think about application security.
 
 This guide is not intended as a manual or recipe for solving more than
 the most basic problems (there are other sources for those), but it
-could be useful for beginners and experts alike when implementing
-secure applications. Spring Boot is also referred to a lot because it
-provides some default behaviour for a secure application and it can be
-useful to understand how that fits in with the overall architecture.
+could be useful for beginners and experts alike. Spring Boot is also
+referred to a lot because it provides some default behaviour for a
+secure application and it can be useful to understand how that fits in
+with the overall architecture. All of the principles apply equally
+well to applications that do not use Spring Boot.
 
 == Authentication and Access Control
 
