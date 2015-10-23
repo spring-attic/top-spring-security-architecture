@@ -284,10 +284,10 @@ for users to concern themselves with which filters are used and when.
 NOTE: The fact that all filters internal to Spring Security are
 unknown to the container is important, especially in a Spring Boot
 application, where all `@Beans` of type `Filter` are registered
-automatically with the container. If you want to add a custom filter
-to the security chain, you need to either not make it a `@Bean` or
-wrap it in a `FilterRegistrationBean` that explicitly disables the
-container registration.
+automatically with the container by default. So if you want to add a
+custom filter to the security chain, you need to either not make it a
+`@Bean` or wrap it in a `FilterRegistrationBean` that explicitly
+disables the container registration.
 
 === Creating and Customizing Filter Chains
 
