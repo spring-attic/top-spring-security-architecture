@@ -4,6 +4,7 @@ projects: [spring-security]
 ---
 :toc:
 :all: {asterisk}{asterisk}
+:images: https://github.com/spring-guides/top-spring-security-architecture/raw/master/images
 
 = Understanding Spring Security
 
@@ -89,7 +90,7 @@ public interface AuthenticationProvider {
 
 The `Class<?>` argument in the `supports()` method is really `Class<?
 extends Authentication>` (it will only ever be asked if it supports
-something that will be passed into the `authenticate()` method.  A
+something that will be passed into the `authenticate()` method).  A
 `ProviderManager` can support multiple different authentication
 mechanisms in the same application by delegating to a chain of
 `AuthenticationProviders`. If a `ProviderManager` doesn't recognise a
@@ -107,7 +108,7 @@ parent is then a kind of "global" resource, acting as a fallback for
 all providers.
 
 .An `AuthenticationManager` hierarchy using `ProviderManager`
-image::images/authentication.png[ProviderManagers with a common parent,70%]
+image::{images}/authentication.png[ProviderManagers with a common parent,70%]
 
 === Customizing Authentication Managers
 
@@ -219,7 +220,7 @@ on Servlet `Filters`, so it is helpful to look at the role of
 `Filters` generally first. The picture below shows the typical
 layering of the handlers for a single HTTP request.
 
-image::images/filters.png[Filter chain delegating to a Servlet,70%]
+image::{images}/filters.png[Filter chain delegating to a Servlet,70%]
 
 The client sends a request to the app, and the container decides which
 filters and which servlet apply to it based on the path of the request
@@ -251,7 +252,7 @@ is a single filter, but inside it there are additional filters, each
 playing a special role. Here's a picture:
 
 .Spring Security is a single physical `Filter` but delegates processing to a chain of internal filters
-image::images/security-filters.png[Spring Security Filter,70%]
+image::{images}/security-filters.png[Spring Security Filter,70%]
 
 In fact there is even one more layer of indirection in the security
 filter: it is usually installed in the container as a
@@ -273,7 +274,7 @@ important feature of this dispatch process is that only one chain ever
 handles a request.
 
 .The Spring Security `FilterChainProxy` dispatches requests to the first chain that matches.
-image::images/security-filters-dispatch.png[Security Filter Dispatch,70%]
+image::{images}/security-filters-dispatch.png[Security Filter Dispatch,70%]
 
 A vanilla Spring Boot application with no custom security
 configuration has a several (call it n) filter chains, where usually
