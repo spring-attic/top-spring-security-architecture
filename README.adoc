@@ -531,7 +531,7 @@ public class ApplicationConfiguration extends AsyncConfigurerSupport {
 
   @Override
   public Executor getAsyncExecutor() {
-    return new DelegatingSecurityContextExecutorService(Executors.new FixedThreadPool(5);
+    return new DelegatingSecurityContextExecutorService(Executors.newFixedThreadPool(5));
   }  
 
 }
