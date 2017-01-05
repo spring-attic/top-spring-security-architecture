@@ -128,7 +128,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
   @Autowired
   public initialize(AuthenticationManagerBuilder builder, DataSource dataSource) {
-    auth.jdbcAuthentication().dataSource(dataSource).withUser("dave")
+    builder.jdbcAuthentication().dataSource(dataSource).withUser("dave")
       .password("secret").roles("USER");
   }
 
@@ -154,7 +154,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
   @Override
   public configure(AuthenticationManagerBuilder builder) {
-    auth.jdbcAuthentication().dataSource(dataSource).withUser("dave")
+    builder.jdbcAuthentication().dataSource(dataSource).withUser("dave")
       .password("secret").roles("USER");
   }
 
