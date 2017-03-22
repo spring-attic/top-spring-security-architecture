@@ -52,7 +52,7 @@ public interface AuthenticationManager {
 }
 ----
 
-An`AuthenticationManager`
+An `AuthenticationManager`
 can do one of 3 things in its `authenticate()` method:
 
 1. return an `Authentication` (normally with `authenticated=true`) if it can verify that the input represents a valid principal.
@@ -182,23 +182,36 @@ default.
 Once authentication is successful, we can move on to authorization,
 and the core strategy here is `AccessDecisionManager`. There are three
 implementations provided by the framework and all three delegate to a
-chain of `DecisionVoter`, a bit like the `ProviderManager` delegates
-to `AuthenticationProviders`. A `DecisionVoter` considers an
-`Authentication` (representing a principal) and a secure `Object`
-which as been decorated with `ConfigAttributes`. The `Object` is
-completely generic in the signatures of the `AccessDecisionManager`
-and `DecisionVoter` - it represents anything that a user might want to
-access (a web resource or a method in a Java class are the two most
-common cases). The `ConfigAttributes` are also fairly generic,
-representing a decoration of the secure `Object` with some metadata
-that determine the level of permission required to access
-it. `ConfigAttribute` is an interface but it only has one method which
-is quite generic and returns a `String`, so these strings encode in
-some way the intention of the owner of the resource, expressing rules
-about who is allowed to access it. A typical `ConfigAttribute` is the
-name of a user role (like `ROLE_ADMIN` or `ROLE_AUDIT`), and they
-often have special formats (like the `ROLE_` prefix) or represent
-expressions that need to be evaluated.
+chain of `AccessDecisionVoter`, a bit like the `ProviderManager`
+delegates to `AuthenticationProviders`.
+
+An `AccessDecisionVoter` considers an `Authentication` (representing a
+principal) and a secure `Object` which as been decorated with
+`ConfigAttributes`:
+
+[source, java]
+----
+boolean supports(ConfigAttribute attribute);
+
+boolean supports(Class<?> clazz);
+
+int vote(Authentication authentication, S object,
+        Collection<ConfigAttribute> attributes);
+----
+
+The `Object` is completely generic in the signatures of the
+`AccessDecisionManager` and `AccessDecisionVoter` - it represents
+anything that a user might want to access (a web resource or a method
+in a Java class are the two most common cases). The `ConfigAttributes`
+are also fairly generic, representing a decoration of the secure
+`Object` with some metadata that determine the level of permission
+required to access it. `ConfigAttribute` is an interface but it only
+has one method which is quite generic and returns a `String`, so these
+strings encode in some way the intention of the owner of the resource,
+expressing rules about who is allowed to access it. A typical
+`ConfigAttribute` is the name of a user role (like `ROLE_ADMIN` or
+`ROLE_AUDIT`), and they often have special formats (like the `ROLE_`
+prefix) or represent expressions that need to be evaluated.
 
 Most people just use the default `AccessDecisionManager` which is
 `AffirmativeBased` (if no voters decline then access is granted). Any
@@ -207,9 +220,9 @@ or modifying the way that the existing ones work.
 
 It is very common to use `ConfigAttributes` that are Spring Expression
 Language (SpEL) expressions, for example `isFullyAuthenticated() &&
-hasRole('FOO')`. This is supported by a `DecisionVoter` that can
-handle the expressions and create a context for them. To extend the
-range of expressions that can be handled requires a custom
+hasRole('FOO')`. This is supported by an `AccessDecisionVoter` that
+can handle the expressions and create a context for them. To extend
+the range of expressions that can be handled requires a custom
 implementation of `SecurityExpressionRoot` and sometimes also
 `SecurityExpressionHandler`.
 
@@ -239,10 +252,11 @@ Spring Session has a `DEFAULT_ORDER` of `Integer.MIN_VALUE + 50`,
 which tells us it likes to be early in the chain, but it doesn't rule
 out other filters coming before it).
 
-Spring Security is installed as a single `Filter` in the chain. In a
-Spring Boot app the security filter is a `@Bean` in the
-`ApplicationContext`, and it is installed by default so that it is
-applied to every request. It is installed at a position defined by
+Spring Security is installed as a single `Filter` in the chain, and
+its concerete type is `FilterChainProxy`, for reasons that will become
+apparent soon. In a Spring Boot app the security filter is a `@Bean`
+in the `ApplicationContext`, and it is installed by default so that it
+is applied to every request. It is installed at a position defined by
 `SecurityProperties.DEFAULT_FILTER_ORDER`, which in turn is anchored
 by `FilterRegistrationBean.REQUEST_WRAPPER_FILTER_MAX_ORDER` (the
 maximum order that a Spring Boot app expects filters to have if they
@@ -256,22 +270,24 @@ image::{images}/security-filters.png[Spring Security Filter,70%]
 
 In fact there is even one more layer of indirection in the security
 filter: it is usually installed in the container as a
-`DelegatingFilterProxy`. The proxy delegates to a `FilterChainProxy`
-which itself is a `@Bean`, usually with a fixed name of
-`springSecurityFilterChain`.  It is the `FilterChainProxy` which
-contains all the security logic arranged internally as a chain (or
-chains). All the filters have the same API (they all implement the
-`Filter` interface from the Servlet Spec) and they all have the
-opportunity to veto the rest of the chain.
+`DelegatingFilterProxy`, which does not have to be a Spring
+`@Bean`. The proxy delegates to a `FilterChainProxy` which is always a
+`@Bean`, usually with a fixed name of `springSecurityFilterChain`.  It
+is the `FilterChainProxy` which contains all the security logic
+arranged internally as a chain (or chains) of filters. All the filters
+have the same API (they all implement the `Filter` interface from the
+Servlet Spec) and they all have the opportunity to veto the rest of
+the chain.
 
-There can be multiple filter chains all managed by Spring Security and
-all unknown to the container. The Spring Security filter contains a
-list of filter chains, and dispatches each request to the first chain
-that matches. The picture below shows the dispatch happening based on
-matching the request path (`/foo/{all}` matches before `/{all}`). This
-is very common but not the only way to match a request. The most
-important feature of this dispatch process is that only one chain ever
-handles a request.
+There can be multiple filter chains all managed by Spring Security in
+the same top level `FilterChainProxy` and all unknown to the
+container. The Spring Security filter contains a list of filter
+chains, and dispatches a request to the first chain that matches
+it. The picture below shows the dispatch happening based on matching
+the request path (`/foo/{all}` matches before `/{all}`). This is very
+common but not the only way to match a request. The most important
+feature of this dispatch process is that only one chain ever handles a
+request.
 
 .The Spring Security `FilterChainProxy` dispatches requests to the first chain that matches.
 image::{images}/security-filters-dispatch.png[Security Filter Dispatch,70%]
