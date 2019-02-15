@@ -214,7 +214,7 @@ expressing rules about who is allowed to access it. A typical
 prefix) or represent expressions that need to be evaluated.
 
 Most people just use the default `AccessDecisionManager` which is
-`AffirmativeBased` (if no voters decline then access is granted). Any
+`AffirmativeBased` (if any voters return affirmatively then access is granted). Any
 customization tends to happen in the voters, either adding new ones,
 or modifying the way that the existing ones work.
 
