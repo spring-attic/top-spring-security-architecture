@@ -186,7 +186,7 @@ chain of `AccessDecisionVoter`, a bit like the `ProviderManager`
 delegates to `AuthenticationProviders`.
 
 An `AccessDecisionVoter` considers an `Authentication` (representing a
-principal) and a secure `Object` which as been decorated with
+principal) and a secure `Object` which has been decorated with
 `ConfigAttributes`:
 
 [source, java]
@@ -293,7 +293,7 @@ request.
 image::{images}/security-filters-dispatch.png[Security Filter Dispatch,70%]
 
 A vanilla Spring Boot application with no custom security
-configuration has a several (call it n) filter chains, where usually
+configuration has several (call it n) filter chains, where usually
 n=6. The first (n-1) chains are there just to ignore static resource
 patterns, like `/css/{all}` and `/images/{all}`, and the error view
 `/error` (the paths can be controlled by the user with
@@ -510,7 +510,7 @@ the method parameter. The type of the `Principal` in an
 `Authentication` is dependent on the `AuthenticationManager` used to
 validate the authentication, so this can be a useful little trick to get a type safe reference to your user data.
 
-If Spring Security is in use the `Principal` from the
+If Spring Security is in use, the `Principal` from the
 `HttpServletRequest` will be of type `Authentication`, so you can also
 use that directly:
 
