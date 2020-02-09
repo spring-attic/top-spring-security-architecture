@@ -253,7 +253,7 @@ which tells us it likes to be early in the chain, but it doesn't rule
 out other filters coming before it).
 
 Spring Security is installed as a single `Filter` in the chain, and
-its concerete type is `FilterChainProxy`, for reasons that will become
+its concrete type is `FilterChainProxy`, for reasons that will become
 apparent soon. In a Spring Boot app the security filter is a `@Bean`
 in the `ApplicationContext`, and it is installed by default so that it
 is applied to every request. It is installed at a position defined by
