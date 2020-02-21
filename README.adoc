@@ -186,7 +186,7 @@ chain of `AccessDecisionVoter`, a bit like the `ProviderManager`
 delegates to `AuthenticationProviders`.
 
 An `AccessDecisionVoter` considers an `Authentication` (representing a
-principal) and a secure `Object` which as been decorated with
+principal) and a secure `Object` which has been decorated with
 `ConfigAttributes`:
 
 [source, java]
