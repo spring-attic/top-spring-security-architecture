@@ -499,7 +499,7 @@ user is logged in it is an `Authentication` that is explicitly
 `authenticated`). You can always access and manipulate the
 `SecurityContext` through static convenience methods in
 `SecurityContextHolder`, which, in turn, manipulate a
-`TheadLocal`. The following example shows such an arrangement:
+`ThreadLocal`. The following example shows such an arrangement:
 
 ====
 [source,java]
