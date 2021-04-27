@@ -4,7 +4,7 @@ projects: [spring-security]
 ---
 :toc:
 :all: {asterisk}{asterisk}
-:images: https://github.com/spring-guides/top-spring-security-architecture/raw/master/images
+:images: https://github.com/spring-guides/top-spring-security-architecture/raw/main/images
 
 = Understanding Spring Security
 
