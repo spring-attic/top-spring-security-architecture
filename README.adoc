@@ -30,7 +30,7 @@ well to applications that do not use Spring Boot.
 
 == Authentication and Access Control
 
-Application security boils down to two more or less independent
+Application security boils down to more or less two independent
 problems: authentication (who are you?) and authorization (what are
 you allowed to do?). Sometimes people say "`access control`" instead of
 "authorization", which can get confusing, but it can be helpful to
