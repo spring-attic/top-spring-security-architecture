@@ -6,6 +6,8 @@ projects: [spring-security]
 :all: {asterisk}{asterisk}
 :images: https://github.com/spring-guides/top-spring-security-architecture/raw/main/images
 
+# This repository is no longer maintained. 
+
 = Understanding Spring Security
 
 This guide is a primer for Spring Security, offering insight into the
